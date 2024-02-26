@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Chatterbox</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link btn btn-outline-success my-2 my-sm-0" href="#">Chatters</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="border border-secondary rounded m-3 p-1" id="messages">Your chats will be displayed here</div>
+    <div class="fixed-bottom bg-light p-3">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="Enter your message" id="chat" name="chat" />
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-primary btn-md" id="btn">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        console.log("hi")
+        const socket = io();
+        const sendBtn = document.getElementById("btn");
+        const sendChat = document.getElementById("chat");
+        const allMessages = document.getElementById("messages");
+
+        socket.on('message', (message) => {
+            const p = document.createElement('p');
+            p.innerText = message;
+            allMessages.appendChild(p);
+        })
+
+        sendBtn.addEventListener("click", (e) => {
+            const message = sendChat.value;
+            console.log(message);
+            socket.emit("user-message", message);
+        });
+    </script>
+
+</body>
+
+</html>
